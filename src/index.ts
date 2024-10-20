@@ -44,25 +44,4 @@ const x8t: X8T = async (fn, options) => {
   }
 };
 
-(async () => {
-  // Named function for better logging
-  const namedFunction = async () => {
-    // Simulate some asynchronous work
-    return new Promise((resolve) =>
-      setTimeout(() => resolve("Completed"), 200)
-    );
-  };
-
-  await x8t(namedFunction, { log: true });
-})();
-
-(async () => {
-  await x8t(
-    () => {
-      throw new Error("API Error!");
-    },
-    { log: true }
-  );
-})();
-
 export default x8t;
