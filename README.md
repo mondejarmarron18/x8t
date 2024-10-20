@@ -1,6 +1,6 @@
 # x8t
 
-A utility for safely executing functions with customizable error handling.
+A utility for safely executing functions.
 
 ## Installation
 
