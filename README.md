@@ -32,20 +32,16 @@ const errorFunction = () => {
 };
 
 // Execute a successful function
-const { result, error, executionTime } = x8t(successFunction, {
+const result = x8t(successFunction, {
   log: true,
 });
 console.log(result); // Output: "Function executed successfully!"
-console.log(executionTime); // Output: e.g., "0.123ms"
 
 // Execute a function that throws an error
-const { result, error, executionTime } = x8t(errorFunction, {
+const result = x8t(errorFunction, {
   log: true,
 });
-if (error) {
-  console.error(error); // Output: "Error: An error occurred!"
-}
-console.log(executionTime); // Output: e.g., "0.456ms"
+console.log(result); // Output: "Error: An error occurred!"
 ```
 
 ## With Asynchronous Functions
