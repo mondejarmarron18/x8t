@@ -1,0 +1,39 @@
+{
+  "name": "x8t",
+  "version": "1.0.0",
+  "description": "A utility for safely executing functions with customizable error handling.",
+  "main": "src/index.js",
+  "author": "Marvin Ronquillo",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.13",
+    "axios": "^1.7.7",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mondejarmarron18/x8t.git"
+  },
+  "homepage": "https://github.com/mondejarmarron18/x8t#readme",
+  "keywords": [
+    "utility",
+    "error-handling",
+    "function-execution"
+  ]
+}
