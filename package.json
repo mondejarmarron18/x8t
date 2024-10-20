@@ -1,7 +1,7 @@
 {
   "name": "x8t",
-  "version": "1.1.1",
-  "description": "A utility for safely executing functions with customizable error handling.",
+  "version": "1.1.2",
+  "description": "A utility for safely executing functions.",
   "main": "dist/index.js",
   "author": "Marvin Ronquillo",
   "license": "MIT",
