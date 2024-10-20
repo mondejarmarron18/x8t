@@ -1,6 +1,6 @@
 # x8t
 
-A utility for safely executing functions with customizable error handling.
+A utility for safely executing functions.
 
 ## Installation
 
@@ -32,24 +32,20 @@ const errorFunction = () => {
 };
 
 // Execute a successful function
-(async () => {
-  const { result, error, executionTime } = await x8t(successFunction, {
-    log: true,
-  });
-  console.log(result); // Output: "Function executed successfully!"
-  console.log(executionTime); // Output: e.g., "0.123ms"
-})();
+const { result, error, executionTime } = x8t(successFunction, {
+  log: true,
+});
+console.log(result); // Output: "Function executed successfully!"
+console.log(executionTime); // Output: e.g., "0.123ms"
 
 // Execute a function that throws an error
-(async () => {
-  const { result, error, executionTime } = await x8t(errorFunction, {
-    log: true,
-  });
-  if (error) {
-    console.error(error); // Output: "Error: An error occurred!"
-  }
-  console.log(executionTime); // Output: e.g., "0.456ms"
-})();
+const { result, error, executionTime } = x8t(errorFunction, {
+  log: true,
+});
+if (error) {
+  console.error(error); // Output: "Error: An error occurred!"
+}
+console.log(executionTime); // Output: e.g., "0.456ms"
 ```
 
 ## With Asynchronous Functions
@@ -96,7 +92,7 @@ Function "anonymous function" execution failed with an execution time of 0.123ms
 
 ## Features
 
-`x8t(fn: Function, options?: { log?: boolean }): Promise<{ result: any, error: any, executionTime: string }>`
+`x8t(fn: Function, options?: { log?: boolean })`
 
 - **fn:** The function to be executed. It can be synchronous or asynchronous.
 - **options:** An optional object to customize the behavior of logging.
