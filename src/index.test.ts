@@ -1,4 +1,4 @@
-import x8t from ".";
+import { x8tAsync, x8tSync } from ".";
 
 const mockApiSuccess = async () => {
   return new Promise((resolve) =>
@@ -15,10 +15,10 @@ const mockApiFailure = async () => {
 
 jest.mock("axios");
 
-describe("x8t function", () => {
-  // Success case test for API call
-  it("should return the result when the API call succeeds", async () => {
-    const { result, error } = await x8t(mockApiSuccess);
+describe("x8tAsync and x8tSync functions", () => {
+  // Success case test for async API call
+  it("x8tAsync: should return the result when the API call succeeds", async () => {
+    const { result, error } = await x8tAsync(mockApiSuccess);
 
     expect({ result, error }).toEqual({
       result: { data: "API Data Success" },
@@ -26,9 +26,9 @@ describe("x8t function", () => {
     });
   });
 
-  // Error case test for API call
-  it("should return the error when the API call fails", async () => {
-    const { result, error } = await x8t(mockApiFailure);
+  // Error case test for async API call
+  it("x8tAsync: should return the error when the API call fails", async () => {
+    const { result, error } = await x8tAsync(mockApiFailure);
 
     expect({ result, error }).toEqual({
       result: null,
@@ -36,11 +36,11 @@ describe("x8t function", () => {
     });
   });
 
-  // Success case test
-  it("should return the result when the function succeeds", async () => {
+  // Success case test for async function
+  it("x8tAsync: should return the result when the async function succeeds", async () => {
     const successFn = async () => "Operation Successful!";
 
-    const { result, error } = await x8t(successFn);
+    const { result, error } = await x8tAsync(successFn);
 
     expect({ result, error }).toEqual({
       result: "Operation Successful!",
@@ -48,13 +48,13 @@ describe("x8t function", () => {
     });
   });
 
-  // Error case test
-  it("should return the error when the function throws an error", async () => {
+  // Error case test for async function
+  it("x8tAsync: should return the error when the async function throws an error", async () => {
     const errorFn = async () => {
       throw new Error("Something went wrong!");
     };
 
-    const { result, error } = await x8t(errorFn);
+    const { result, error } = await x8tAsync(errorFn);
 
     expect({ result, error }).toEqual({
       result: null,
@@ -63,10 +63,10 @@ describe("x8t function", () => {
   });
 
   // Test synchronous function success
-  it("should return the result when a synchronous function succeeds", async () => {
+  it("x8tSync: should return the result when a synchronous function succeeds", () => {
     const syncSuccessFn = () => "Synchronous Success";
 
-    const { result, error } = await x8t(syncSuccessFn);
+    const { result, error } = x8tSync(syncSuccessFn);
 
     expect({ result, error }).toEqual({
       result: "Synchronous Success",
@@ -75,26 +75,25 @@ describe("x8t function", () => {
   });
 
   // Test synchronous function error
-  it("should return the error when a synchronous function throws an error", async () => {
+  it("x8tSync: should return the error when a synchronous function throws an error", () => {
     const syncErrorFn = () => {
       throw new Error("Sync Error!");
     };
 
-    const { error } = await x8t(syncErrorFn);
+    const { result, error } = x8tSync(syncErrorFn);
 
-    expect(error).toEqual(new Error("Sync Error!"));
+    expect({ result, error }).toEqual({
+      result: null,
+      error: new Error("Sync Error!"),
+    });
   });
 
-  // Get synchronous function execution time
-  it("should return the execution time when a synchronous function is executed", async () => {
-    const syncSuccessFn = () => {
-      return new Promise((resolve) =>
-        setTimeout(() => resolve("Synchronous Success"), 100)
-      );
-    };
+  // Test synchronous function execution time
+  it("x8tSync: should return the execution time when a synchronous function is executed", () => {
+    const syncSuccessFn = () => "Synchronous Success";
 
-    const { executionTime } = await x8t(syncSuccessFn);
+    const { executionTime } = x8tSync(syncSuccessFn);
 
-    expect(executionTime).toMatch(/^[0-9.]+ms$/);
+    expect(executionTime).toMatch(/^[0-9]+ms$/);
   });
 });

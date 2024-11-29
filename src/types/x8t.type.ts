@@ -2,25 +2,26 @@ export type X8TOptions = {
   log?: boolean;
 };
 
-export type X8TFunctionArg<Result> = () => Promise<Result> | Result;
+export type X8TExecutionTime = `${number}ms`;
 
-export type X8TResult<Result> = {
-  result: Result;
+export type X8TResult<ResultType> = {
+  result: ResultType;
   error: null;
+  executionTime: X8TExecutionTime;
 };
 
 export type X8TError = {
   result: null;
   error: unknown;
+  executionTime: X8TExecutionTime;
 };
 
-export type X8TReturn<Result> = Promise<
-  (X8TResult<Result> | X8TError) & {
-    executionTime: `${number}ms`;
-  }
->;
-
-export type X8T = <Result>(
-  fn: X8TFunctionArg<Result>,
+export type X8TSync = <ResultType>(
+  fn: () => ResultType,
   options?: X8TOptions
-) => X8TReturn<Result>;
+) => X8TResult<ResultType> | X8TError;
+
+export type X8TAsync = <ResultType>(
+  fn: () => Promise<ResultType>,
+  options?: X8TOptions
+) => Promise<X8TResult<ResultType> | X8TError>;

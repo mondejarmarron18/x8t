@@ -2,6 +2,52 @@
 
 A utility for safely executing functions.
 
+<hr/>
+
+## What Problem Does It Solve?
+
+1. **Variable Scope Inside** `try-catch` **Blocks.**
+
+   Consider this scenario:
+
+   ```typescript
+   let result;
+   try {
+     result = await apiRequest();
+   } catch (error) {
+     console.error(error);
+   }
+   // What if you want to access the `result` here?
+   ```
+
+   Declaring variables outside the `try-catch` block is necessary to use them later. With x8t, you eliminate this extra boilerplate and handle function execution cleanly.
+
+2. **Avoiding Nested** `try-catch` **Blocks**
+
+   Nesting multiple `try-catch` blocks to handle different logic can make code messy and hard to read.
+
+   Instead of putting all your code in a single `try-catch` block, you can handle each operation individually with `x8t`, keeping your code modular and maintainable.
+
+3. **Treating Errors as Values**
+
+   By capturing errors as values, you can conditionally handle them instead of immediately throwing or logging. This approach provides greater flexibility:
+
+   ```typescript
+   const { result, error } = x8tSync(() => {
+     throw new Error("Intentional error!");
+   });
+   if (error !== null) {
+     console.log("Custom handling for error:", error.message);
+     throw new Error("Something went wrong!");
+   }
+   ```
+
+4. **Avoiding Unintended System Downtime**
+
+   By safely handling errors during function execution, `x8t` ensures that your application remains robust and less prone to unexpected crashes, especially in critical operations.
+
+<hr/>
+
 ## Installation
 
 You can install `x8t` using npm or yarn:
@@ -12,19 +58,19 @@ or
 yarn add x8t
 ```
 
+<hr/>
+
 ## Usage
 
-### Basic Example
+### Synchronous Example
 
-Here's a quick example of how to use `x8t`:
+Here's a quick example of how to use `x8tSync`:
 
-```javascript
-import x8t from "x8t";
+```typescript
+import { x8tSync } from "x8t";
 
 // Named function for better logging
-const successFunction = () => {
-  return "Function executed successfully!";
-};
+const successFunction = () => "Function executed successfully!";
 
 // Function that throws an error
 const errorFunction = () => {
@@ -32,47 +78,60 @@ const errorFunction = () => {
 };
 
 // Execute a successful function
-const result = x8t(successFunction, {
-  log: true,
-});
-console.log(result); // Output: "Function executed successfully!"
+const { result, error } = x8tSync(successFunction, { log: true });
+console.log(result);
+// Output: "Function executed successfully!"
 
 // Execute a function that throws an error
-const result = x8t(errorFunction, {
-  log: true,
-});
-console.log(result); // Output: "Error: An error occurred!"
+const { error: caughtError } = x8tSync(errorFunction, { log: true });
+if (caughtError !== null) {
+  console.log("Handling error as a value:", caughtError.message);
+  // You can re-throw a custom error or handle it conditionally
+}
 ```
 
-## With Asynchronous Functions
+<hr/>
 
-You can also use `x8t` with asynchronous functions:
+### Asynchronous Example
 
-```javascript
-const asyncFunction = async () => {
+You can also use `x8tAsync` with asynchronous functions:
+
+```typescript
+import { x8tAsync } from "x8t";
+
+const asyncApiRequest = async () => {
   return new Promise((resolve) =>
-    setTimeout(() => resolve("Async function succeeded!"), 200)
+    setTimeout(() => resolve("API request succeeded!"), 200)
   );
 };
 
 // Execute an asynchronous function
 (async () => {
-  const { result, error, executionTime } = await x8t(asyncFunction, {
+  const { result, error, executionTime } = await x8tAsync(asyncApiRequest, {
     log: true,
   });
-  console.log(result); // Output: "Async function succeeded!"
-  console.log(executionTime); // Output: e.g., "200ms"
+  if (error !== null) {
+    console.error("API request failed:", error.message);
+    // Custom error handling logic
+  } else {
+    console.log("API request result:", result);
+  }
+  console.log("Execution time:", executionTime);
 })();
 ```
+
+<hr/>
 
 ## Logging
 
 You can enable logging to get details about function execution:
 
-```javascript
+```typescript
+import { x8tAsync } from "x8t";
+
 (async () => {
-  await x8t(
-    () => {
+  await x8tAsync(
+    async () => {
       throw new Error("API Error!");
     },
     { log: true }
@@ -83,27 +142,42 @@ You can enable logging to get details about function execution:
 When logging is enabled, you'll see messages like:
 
 ```
-Function "anonymous function" execution failed with an execution time of 0.123ms
+Function "anonymous" failed in 123ms
+Error: API Error!
 ```
+
+<hr/>
 
 ## Features
 
-`x8t(fn: Function, options?: { log?: boolean })`
+`x8tSync(fn: Function, options?: { log?: boolean })`
 
-- **fn:** The function to be executed. It can be synchronous or asynchronous.
-- **options:** An optional object to customize the behavior of logging.
-  - **log:** If set to true, logs function execution details.
+- fn: The synchronous function to be executed.
+- options: An optional object to customize the behavior of logging.
+  - log: If set to true, logs function execution details.
 
-**Returns**
+`x8tAsync(fn: Function, options?: { log?: boolean })`
 
-- A Promise that resolves to an object containing:
-  - **result:** The result of the function execution.
-  - **error:** The error object if the function throws an error, or `null`.
-  - **executionTime:** The time taken for execution in milliseconds.
+- fn: The asynchronous function to be executed.
+- options: An optional object to customize the behavior of logging.
+  - log: If set to true, logs function execution details.
+
+#### Returns
+
+For both `x8tSync` and `x8tAsync`:
+
+- An object containing:
+  - result: The result of the function execution.
+  - error: The error object if the function throws an error, or null.
+  - executionTime: The time taken for execution in milliseconds.
+
+<hr/>
 
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+
+<hr/>
 
 ## Author
 
