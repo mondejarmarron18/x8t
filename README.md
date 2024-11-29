@@ -2,8 +2,6 @@
 
 A utility for safely executing functions.
 
-<hr/>
-
 ## What Problem Does It Solve?
 
 1. **Variable Scope Inside** `try-catch` **Blocks.**
@@ -46,8 +44,6 @@ A utility for safely executing functions.
 
    By safely handling errors during function execution, `x8t` ensures that your application remains robust and less prone to unexpected crashes, especially in critical operations.
 
-<hr/>
-
 ## Installation
 
 You can install `x8t` using npm or yarn:
@@ -57,8 +53,6 @@ npm install x8t
 or
 yarn add x8t
 ```
-
-<hr/>
 
 ## Usage
 
@@ -90,8 +84,6 @@ if (caughtError !== null) {
 }
 ```
 
-<hr/>
-
 ### Asynchronous Example
 
 You can also use `x8tAsync` with asynchronous functions:
@@ -120,8 +112,6 @@ const asyncApiRequest = async () => {
 })();
 ```
 
-<hr/>
-
 ## Logging
 
 You can enable logging to get details about function execution:
@@ -146,8 +136,6 @@ Function "anonymous" failed in 123ms
 Error: API Error!
 ```
 
-<hr/>
-
 ## Features
 
 `x8tSync(fn: Function, options?: { log?: boolean })`
@@ -171,13 +159,9 @@ For both `x8tSync` and `x8tAsync`:
   - error: The error object if the function throws an error, or null.
   - executionTime: The time taken for execution in milliseconds.
 
-<hr/>
-
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-<hr/>
 
 ## Author
 
