@@ -96,4 +96,32 @@ describe("x8tAsync and x8tSync functions", () => {
 
     expect(executionTime).toMatch(/^[0-9]+ms$/);
   });
+
+  // Test promise success
+  it("x8tAsync: should return the result when a promise succeeds", async () => {
+    const mockPromiseSuccess = new Promise((resolve) =>
+      setTimeout(() => resolve("Promise Data Success"), 100)
+    );
+
+    const { result, error } = await x8tAsync(mockPromiseSuccess);
+
+    expect({ result, error }).toEqual({
+      result: "Promise Data Success",
+      error: null,
+    });
+  });
+
+  // Test promise error
+  it("x8tAsync: should return the error when a promise fails", async () => {
+    const mockPromiseFailure = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Promise Error!")), 100)
+    );
+
+    const { result, error } = await x8tAsync(mockPromiseFailure);
+
+    expect({ result, error }).toEqual({
+      result: null,
+      error: new Error("Promise Error!"),
+    });
+  });
 });
