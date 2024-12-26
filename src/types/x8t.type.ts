@@ -22,6 +22,6 @@ export type X8TSync = <ResultType>(
 ) => X8TResult<ResultType> | X8TError;
 
 export type X8TAsync = <ResultType>(
-  fn: () => Promise<ResultType>,
+  fn: Promise<ResultType> | (() => Promise<ResultType>),
   options?: X8TOptions
 ) => Promise<X8TResult<ResultType> | X8TError>;

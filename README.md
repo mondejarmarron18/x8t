@@ -20,13 +20,31 @@ A utility for safely executing functions.
 
    Declaring variables outside the `try-catch` block is necessary to use them later. With x8t, you eliminate this extra boilerplate and handle function execution cleanly.
 
+   Instead, you can access the result directly:
+
+   ```typescript
+   const { result, error } = await x8tAsync(apiRequest);
+   // Now you can easily access the error or result outside the try-catch block
+   ```
+
 2. **Avoiding Nested** `try-catch` **Blocks**
 
    Nesting multiple `try-catch` blocks to handle different logic can make code messy and hard to read.
 
    Instead of putting all your code in a single `try-catch` block, you can handle each operation individually with `x8t`, keeping your code modular and maintainable.
 
-3. **Treating Errors as Values**
+3. **Handling Promises Directly**
+
+   With `x8tAsync`, you can pass a direct promise or a promise-returning function as an argument, making it even easier to manage asynchronous operations:
+
+   ```typescript
+   const myPromise = new Promise((resolve) => resolve("Promise resolved!"));
+
+   const { result, error } = await x8tAsync(myPromise);
+   console.log(result); // Output: "Promise resolved!"
+   ```
+
+4. **Treating Errors as Values**
 
    By capturing errors as values, you can conditionally handle them instead of immediately throwing or logging. This approach provides greater flexibility:
 
@@ -40,7 +58,26 @@ A utility for safely executing functions.
    }
    ```
 
-4. **Avoiding Unintended System Downtime**
+5. **Result Typing for Improved Developer Experience.**
+
+   With `x8t`, you can explicitly type the result for stronger TypeScript support, reducing type-related bugs and enabling better IntelliSense:
+
+   ```typescript
+   type User = {
+     email: string;
+     name: string;
+   };
+
+   const { result, error } = x8tSync<User>(getUser);
+
+   if (error !== null) {
+     return console.error(error);
+   }
+
+   console.log(`User name: ${result.name}`);
+   ```
+
+6. **Avoiding Unintended System Downtime**
 
    By safely handling errors during function execution, `x8t` ensures that your application remains robust and less prone to unexpected crashes, especially in critical operations.
 
@@ -91,24 +128,27 @@ You can also use `x8tAsync` with asynchronous functions:
 ```typescript
 import { x8tAsync } from "x8t";
 
+// Passing a promise-returning function
 const asyncApiRequest = async () => {
   return new Promise((resolve) =>
     setTimeout(() => resolve("API request succeeded!"), 200)
   );
 };
 
-// Execute an asynchronous function
+// Passing a direct promise
+const myPromise = new Promise((resolve) =>
+  setTimeout(() => resolve("Direct Promise resolved!"), 100)
+);
+
 (async () => {
   const { result, error, executionTime } = await x8tAsync(asyncApiRequest, {
     log: true,
   });
-  if (error !== null) {
-    console.error("API request failed:", error.message);
-    // Custom error handling logic
-  } else {
-    console.log("API request result:", result);
-  }
+  console.log("API request result:", result); // Output: "API request succeeded!"
   console.log("Execution time:", executionTime);
+
+  const { result: promiseResult } = await x8tAsync(myPromise);
+  console.log("Direct promise result:", promiseResult); // Output: "Direct Promise resolved!"
 })();
 ```
 
@@ -144,9 +184,9 @@ Error: API Error!
 - options: An optional object to customize the behavior of logging.
   - log: If set to true, logs function execution details.
 
-`x8tAsync(fn: Function, options?: { log?: boolean })`
+`x8tAsync(fn: Function | Promise, options?: { log?: boolean })`
 
-- fn: The asynchronous function to be executed.
+- fn: The asynchronous function or direct promise to execute.
 - options: An optional object to customize the behavior of logging.
   - log: If set to true, logs function execution details.
 
@@ -165,5 +205,4 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## Author
 
-Marvin Ronquillo
-(Your GitHub Profile)[https://github.com/mondejarmarron18]
+[Marvin Ronquillo](https://github.com/mondejarmarron18)

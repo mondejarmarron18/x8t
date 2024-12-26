@@ -20,30 +20,35 @@ const logExecution = (
 
 // Asynchronous function
 export const x8tAsync: X8TAsync = async <ResultType>(
-  fn: () => Promise<ResultType>,
+  fn: Promise<ResultType> | (() => Promise<ResultType>),
   options?: X8TOptions
 ) => {
   const start = performance.now();
-  try {
-    const result = await fn();
-    const end = performance.now();
 
-    if (options?.log) logExecution(fn.name || "anonymous", end - start);
+  const log = (success: boolean, error?: unknown) => {
+    const end = performance.now();
+    const fnName =
+      typeof fn === "function" ? fn.name || "anonymous" : "promise";
+    if (options?.log) {
+      logExecution(fnName, end - start, success ? undefined : error);
+    }
+    return Math.round(end - start);
+  };
+  try {
+    const result = typeof fn === "function" ? await fn() : await fn;
+    const executionTime = log(true);
 
     return {
       result,
       error: null,
-      executionTime: `${Math.round(end - start)}ms`,
+      executionTime: `${executionTime}ms`,
     };
   } catch (error) {
-    const end = performance.now();
-
-    if (options?.log) logExecution(fn.name || "anonymous", end - start, error);
-
+    const executionTime = log(true);
     return {
       result: null,
       error,
-      executionTime: `${Math.round(end - start)}ms`,
+      executionTime: `${executionTime}ms`,
     };
   }
 };
@@ -54,26 +59,33 @@ export const x8tSync: X8TSync = <ResultType>(
   options?: X8TOptions
 ) => {
   const start = performance.now();
+
+  const log = (success: boolean, error?: unknown) => {
+    const end = performance.now();
+    const fnName = fn.name || "anonymous";
+    if (options?.log)
+      logExecution(fnName, end - start, success ? undefined : error);
+    return Math.round(end - start);
+  };
+
   try {
     const result = fn();
-    const end = performance.now();
-
-    if (options?.log) logExecution(fn.name || "anonymous", end - start);
+    const executionTime = log(true);
 
     return {
       result,
       error: null,
-      executionTime: `${Math.round(end - start)}ms`,
+      executionTime: `${executionTime}ms`,
     };
   } catch (error) {
     const end = performance.now();
 
-    if (options?.log) logExecution(fn.name || "anonymous", end - start, error);
+    const executionTime = log(true);
 
     return {
       result: null,
       error,
-      executionTime: `${Math.round(end - start)}ms`,
+      executionTime: `${executionTime}ms`,
     };
   }
 };
