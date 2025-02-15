@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.1.2] - 2024-12-26
+## [3.0.0] - 2025-02-15
+
+### Added
+
+- Added support for logging to a file, colors, and more options.
+
+## [2.1.2] - 2025-02-15
+
+### Fixed
 
 - Disabled function return data to logging output by default.
 
 ## [2.1.1] - 2024-12-26
+
+### Added
 
 - Added function return data to logging output.
 

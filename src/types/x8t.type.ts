@@ -1,6 +1,10 @@
 export type X8TOptions = {
-  log?: boolean;
   logResult?: boolean;
+  silent?: boolean;
+  logToFile?: {
+    path: string;
+    logResult?: boolean;
+  };
 };
 
 export type X8TExecutionTime = `${number}ms`;
