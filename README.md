@@ -109,7 +109,10 @@ const errorFunction = () => {
 };
 
 // Execute a successful function
-const { result, error } = x8tSync(successFunction, { log: true });
+const { result, error } = x8tSync(successFunction, {
+  log: true,
+  logResult: true,
+});
 console.log(result);
 // Output: "Function executed successfully!"
 

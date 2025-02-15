@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.2] - 2024-12-26
+
+- Disabled function return data to logging output by default.
+
+## [2.1.1] - 2024-12-26
+
+- Added function return data to logging output.
+
 ## [2.1.0] - 2024-12-26
 
 ### Added
