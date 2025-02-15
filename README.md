@@ -4,160 +4,120 @@ A utility for safely executing functions.
 
 ## What Problem Does It Solve?
 
-1. **Variable Scope Inside** `try-catch` **Blocks.**
+### 1. **Variable Scope Inside \*\***`try-catch`\***\* Blocks**
 
-   Consider this scenario:
+Consider this scenario:
 
-   ```typescript
-   let result;
-   try {
-     result = await apiRequest();
-   } catch (error) {
-     console.error(error);
-   }
-   // What if you want to access the `result` here?
-   ```
+```typescript
+let result;
+try {
+  result = await apiRequest();
+} catch (error) {
+  console.error(error);
+}
+// What if you want to access the `result` here?
+```
 
-   Declaring variables outside the `try-catch` block is necessary to use them later. With x8t, you eliminate this extra boilerplate and handle function execution cleanly.
+Declaring variables outside the `try-catch` block is necessary to use them later. With `x8t`, you eliminate this extra boilerplate and handle function execution cleanly:
 
-   Instead, you can access the result directly:
+```typescript
+const { result, error } = await x8tAsync(apiRequest);
+// Now you can easily access the error or result outside the try-catch block
+```
 
-   ```typescript
-   const { result, error } = await x8tAsync(apiRequest);
-   // Now you can easily access the error or result outside the try-catch block
-   ```
+### 2. **Avoiding Nested \*\***`try-catch`\***\* Blocks**
 
-2. **Avoiding Nested** `try-catch` **Blocks**
+Nesting multiple `try-catch` blocks to handle different logic can make code messy and hard to read. Instead, `x8t` lets you handle each operation individually, keeping your code modular and maintainable.
 
-   Nesting multiple `try-catch` blocks to handle different logic can make code messy and hard to read.
+### 3. **Handling Promises Directly**
 
-   Instead of putting all your code in a single `try-catch` block, you can handle each operation individually with `x8t`, keeping your code modular and maintainable.
+With `x8tAsync`, you can pass a direct promise or a promise-returning function as an argument:
 
-3. **Handling Promises Directly**
+```typescript
+const myPromise = new Promise((resolve) => resolve("Promise resolved!"));
+const { result, error } = await x8tAsync(myPromise);
+console.log(result); // Output: "Promise resolved!"
+```
 
-   With `x8tAsync`, you can pass a direct promise or a promise-returning function as an argument, making it even easier to manage asynchronous operations:
+### 4. **Treating Errors as Values Instead of Throwing Immediately**
 
-   ```typescript
-   const myPromise = new Promise((resolve) => resolve("Promise resolved!"));
+Instead of throwing errors, `x8t` captures them as values:
 
-   const { result, error } = await x8tAsync(myPromise);
-   console.log(result); // Output: "Promise resolved!"
-   ```
+```typescript
+const { result, error } = x8tSync(() => {
+  throw new Error("Intentional error!");
+});
 
-4. **Treating Errors as Values**
+if (error !== null) {
+  console.log("Custom handling for error:", error.message);
+  throw error; // If needed
+}
+```
 
-   By capturing errors as values, you can conditionally handle them instead of immediately throwing or logging. This approach provides greater flexibility:
+### 5. **Strong TypeScript Support**
 
-   ```typescript
-   const { result, error } = x8tSync(() => {
-     throw new Error("Intentional error!");
-   });
-   if (error !== null) {
-     console.log("Custom handling for error:", error.message);
-     throw new Error("Something went wrong!");
-   }
-   ```
+Explicitly typing results improves TypeScript support:
 
-5. **Result Typing for Improved Developer Experience.**
+```typescript
+type User = {
+  email: string;
+  name: string;
+};
 
-   With `x8t`, you can explicitly type the result for stronger TypeScript support, reducing type-related bugs and enabling better IntelliSense:
+const { result, error } = x8tSync<User>(getUser);
 
-   ```typescript
-   type User = {
-     email: string;
-     name: string;
-   };
+if (error !== null) {
+  console.error(error);
+}
 
-   const { result, error } = x8tSync<User>(getUser);
+console.log(`User name: ${result.name}`);
+```
 
-   if (error !== null) {
-     return console.error(error);
-   }
+### 6. **Ensuring System Stability**
 
-   console.log(`User name: ${result.name}`);
-   ```
-
-6. **Avoiding Unintended System Downtime**
-
-   By safely handling errors during function execution, `x8t` ensures that your application remains robust and less prone to unexpected crashes, especially in critical operations.
+By safely handling errors, `x8t` helps prevent unexpected application crashes, especially in critical operations.
 
 ## Installation
 
-You can install `x8t` using npm or yarn:
-
 ```bash
 npm install x8t
-or
+# or
 yarn add x8t
 ```
 
 ## Usage
 
-### Synchronous Example
-
-Here's a quick example of how to use `x8tSync`:
+### **Synchronous Example**
 
 ```typescript
-import { x8tSync } from "x8t";
-
-// Named function for better logging
-const successFunction = () => "Function executed successfully!";
-
-// Function that throws an error
-const errorFunction = () => {
-  throw new Error("An error occurred!");
-};
-
-// Execute a successful function
 const { result, error } = x8tSync(successFunction, {
-  log: true,
-  logResult: true,
+  logResult: true, // Log result from return value from executed function.
+  logToFile: {
+    path: "./x8t.log", // Writes logs to file
+    logResult: true, // Log result from return value from executed function to file
+  },
+  silent: true, // Prevents console logging
 });
 console.log(result);
-// Output: "Function executed successfully!"
-
-// Execute a function that throws an error
-const { error: caughtError } = x8tSync(errorFunction, { log: true });
-if (caughtError !== null) {
-  console.log("Handling error as a value:", caughtError.message);
-  // You can re-throw a custom error or handle it conditionally
+if (error !== null) {
+  console.log("Handling error as a value:", error.message);
 }
 ```
 
-### Asynchronous Example
-
-You can also use `x8tAsync` with asynchronous functions:
+### **Asynchronous Example**
 
 ```typescript
-import { x8tAsync } from "x8t";
-
-// Passing a promise-returning function
-const asyncApiRequest = async () => {
-  return new Promise((resolve) =>
-    setTimeout(() => resolve("API request succeeded!"), 200)
-  );
-};
-
-// Passing a direct promise
-const myPromise = new Promise((resolve) =>
-  setTimeout(() => resolve("Direct Promise resolved!"), 100)
-);
-
-(async () => {
-  const { result, error, executionTime } = await x8tAsync(asyncApiRequest, {
-    log: true,
-  });
-  console.log("API request result:", result); // Output: "API request succeeded!"
-  console.log("Execution time:", executionTime);
-
-  const { result: promiseResult } = await x8tAsync(myPromise);
-  console.log("Direct promise result:", promiseResult); // Output: "Direct Promise resolved!"
-})();
+const { result, error, executionTime } = await x8tAsync(asyncApiRequest, {
+  logResult: true, // Log result from return value from executed function.
+  logToFile: { path: "./x8t.log" }, // Writes logs to file
+  silent: false, // Allows console logging
+});
+console.log("API request result:", result);
 ```
 
 ## Logging
 
-You can enable logging to get details about function execution:
+Logging is enabled by default but minimizes unnecessary output unless specified.
 
 ```typescript
 import { x8tAsync } from "x8t";
@@ -167,44 +127,26 @@ import { x8tAsync } from "x8t";
     async () => {
       throw new Error("API Error!");
     },
-    { log: true }
+    {
+      logResult: true,
+      logToFile: { path: "./x8t.log", logResult: true },
+      silent: true,
+    }
   );
 })();
 ```
 
-When logging is enabled, you'll see messages like:
+## Options
 
-```
-Function "anonymous" failed in 123ms
-Error: API Error!
-```
-
-## Features
-
-`x8tSync(fn: Function, options?: { log?: boolean })`
-
-- fn: The synchronous function to be executed.
-- options: An optional object to customize the behavior of logging.
-  - log: If set to true, logs function execution details.
-
-`x8tAsync(fn: Function | Promise, options?: { log?: boolean })`
-
-- fn: The asynchronous function or direct promise to execute.
-- options: An optional object to customize the behavior of logging.
-  - log: If set to true, logs function execution details.
-
-#### Returns
-
-For both `x8tSync` and `x8tAsync`:
-
-- An object containing:
-  - result: The result of the function execution.
-  - error: The error object if the function throws an error, or null.
-  - executionTime: The time taken for execution in milliseconds.
+| Option      | Type                                    | Default     | Description                                                      |
+| ----------- | --------------------------------------- | ----------- | ---------------------------------------------------------------- |
+| `logResult` | `boolean`                               | `false`     | Log result from return value from executed function.             |
+| `logToFile` | `{ path: string; logResult?: boolean }` | `undefined` | Writes logs to a specified file.                                 |
+| `silent`    | `boolean`                               | `false`     | Prevents console logging while allowing file logging if enabled. |
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+Contributions are welcome! Please open an issue or submit a pull request.
 
 ## Author
 
