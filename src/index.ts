@@ -4,23 +4,23 @@ const logExecution = (
   fnName: string,
   executionTime: number,
   result: unknown,
-  isError: boolean = false
+  isError: boolean = false,
+  logResult: boolean = false
 ): void => {
   const functionName = fnName || "anonymous";
   const status = isError ? "failed" : "succeeded";
   const roundedTime = Math.round(executionTime);
-  const message = `Function "${functionName}" ${status} in ${roundedTime}ms`;
+  const message = `Function "${functionName}" ${status} in ${roundedTime}ms:`;
 
   if (isError) {
-    console.error({
-      message,
-      reason: result,
-    });
-  } else {
-    console.log({
-      message,
-      result,
-    });
+    console.error(message);
+    return console.error(result);
+  }
+
+  console.log(message);
+
+  if (logResult) {
+    console.log(result);
   }
 };
 
@@ -36,7 +36,7 @@ export const x8tAsync: X8TAsync = async <ResultType>(
     const fnName =
       typeof fn === "function" ? fn.name || "anonymous" : "promise";
     if (options?.log) {
-      logExecution(fnName, end - start, result, isError);
+      logExecution(fnName, end - start, result, isError, options?.logResult);
     }
     return Math.round(end - start);
   };
@@ -72,7 +72,7 @@ export const x8tSync: X8TSync = <ResultType>(
     const fnName =
       typeof fn === "function" ? fn.name || "anonymous" : "promise";
     if (options?.log) {
-      logExecution(fnName, end - start, result, isError);
+      logExecution(fnName, end - start, result, isError, options?.logResult);
     }
     return Math.round(end - start);
   };

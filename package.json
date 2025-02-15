@@ -1,6 +1,6 @@
 {
   "name": "x8t",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "A utility for safely executing functions.",
   "main": "dist/index.js",
   "author": "Marvin Ronquillo",
