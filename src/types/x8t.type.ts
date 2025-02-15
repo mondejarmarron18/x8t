@@ -1,11 +1,11 @@
-export type X8TOptions = {
-  logResult?: boolean;
-  silent?: boolean;
-  logToFile?: {
+export type X8TOptions = Partial<{
+  silent: boolean;
+  logResult: boolean;
+  logToFile: {
     path: string;
     logResult?: boolean;
   };
-};
+}>;
 
 export type X8TExecutionTime = `${number}ms`;
 

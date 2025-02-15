@@ -9,29 +9,23 @@ const logExecution = (
   includeResult: X8TOptions["logResult"] = false,
   logToFile: X8TOptions["logToFile"]
 ): void => {
-  const functionName = fnName || "anonymous";
   const status = isError ? "failed" : "executed";
   const roundedTime = Math.round(executionTime);
-  const message = `Function "${functionName}" ${status} in ${roundedTime}ms`;
   const currentTime = new Date().toISOString();
   const logHead = `[X8T ${isError ? "ERROR" : "SUCCESS"} - ${currentTime}]`;
+  const message = `${logHead} Function "${fnName}" ${status} in ${roundedTime}ms`;
 
   if (logToFile?.path) {
-    fs.writeFileSync(
-      logToFile.path,
-      `${logHead} ${message}\n${
-        isError || logToFile.logResult ? `Debug Info: ${result}\n` : ""
-      }`,
-      { flag: "a" }
-    );
+    const debugInfo =
+      isError || logToFile.logResult ? `Debug Info: ${result}\n` : "";
+    fs.appendFileSync(logToFile.path, `${message}\n${debugInfo}`, "utf8");
   }
 
-  const prefix = `\x1b[${isError ? "31" : "32"}m${logHead}\x1b[0m ${message}`;
-
-  console.log(prefix);
+  const colorCode = isError ? "31" : "32"; // Red for errors, Green for success
+  console.log(`\x1b[${colorCode}m${message}\x1b[0m`);
 
   if (isError || includeResult) {
-    return console.log(`\x1b[36mDebug Info:\x1b[0m`, result);
+    console.log(`\x1b[36mDebug Info:\x1b[0m`, result);
   }
 };
 

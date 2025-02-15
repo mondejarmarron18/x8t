@@ -93,9 +93,8 @@ yarn add x8t
 const { result, error } = x8tSync(successFunction, {
   logResult: true, // Log result from return value from executed function.
   logToFile: {
-    // Writes logs to file
-    path: "./x8t.log",
-    logResult: true, // Add the result from the executed function to the log file
+    path: "./x8t.log", // Writes logs to file
+    logResult: true, // Log result from return value from executed function to file
   },
   silent: true, // Prevents console logging
 });
