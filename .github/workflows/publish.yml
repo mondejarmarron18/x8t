@@ -1,11 +1,15 @@
 name: publish
 
 on:
-  release:
-    types: [created]
+  workflow_run:
+    workflows:
+      - test
+    types:
+      - completed
 
 jobs:
   build:
+    if: ${{github.event.workflow_run.event == 'push' && github.event.workflow_run.conclusion == 'success'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +17,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
       - run: npm ci
-      - run: npm test
+      - run: npm run build
 
   publish-npm:
     needs: build
