@@ -96,7 +96,7 @@ const { result, error } = x8tSync(successFunction, {
     path: "./x8t.log", // Writes logs to file
     logResult: true, // Log result from return value from executed function to file
   },
-  silent: true, // Prevents console logging
+  log: true, // Prevents console logging
 });
 console.log(result);
 if (error !== null) {
@@ -110,7 +110,7 @@ if (error !== null) {
 const { result, error, executionTime } = await x8tAsync(asyncApiRequest, {
   logResult: true, // Log result from return value from executed function.
   logToFile: { path: "./x8t.log" }, // Writes logs to file
-  silent: false, // Allows console logging
+  log: false, // Allows console logging
 });
 console.log("API request result:", result);
 ```
@@ -130,7 +130,7 @@ import { x8tAsync } from "x8t";
     {
       logResult: true,
       logToFile: { path: "./x8t.log", logResult: true },
-      silent: true,
+      log: true,
     }
   );
 })();
@@ -142,7 +142,7 @@ import { x8tAsync } from "x8t";
 | ----------- | --------------------------------------- | ----------- | ---------------------------------------------------------------- |
 | `logResult` | `boolean`                               | `false`     | Log result from return value from executed function.             |
 | `logToFile` | `{ path: string; logResult?: boolean }` | `undefined` | Writes logs to a specified file.                                 |
-| `silent`    | `boolean`                               | `false`     | Prevents console logging while allowing file logging if enabled. |
+| `log`       | `boolean`                               | `true`      | Prevents console logging while allowing file logging if enabled. |
 
 ## Contributing
 

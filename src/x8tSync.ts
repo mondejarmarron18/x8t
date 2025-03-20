@@ -13,7 +13,7 @@ const x8tSync: X8TSync = <ResultType>(
     const fnName =
       typeof fn === "function" ? fn.name || "anonymous" : "promise";
 
-    if (!options?.silent) {
+    if (options?.log) {
       logExecution(
         fnName,
         end - start,
