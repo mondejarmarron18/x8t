@@ -138,11 +138,11 @@ import { x8tAsync } from "x8t";
 
 ## Options
 
-| Option      | Type                                    | Default     | Description                                                      |
-| ----------- | --------------------------------------- | ----------- | ---------------------------------------------------------------- |
-| `logResult` | `boolean`                               | `false`     | Log result from return value from executed function.             |
-| `logToFile` | `{ path: string; logResult?: boolean }` | `undefined` | Writes logs to a specified file.                                 |
-| `log`       | `boolean`                               | `true`      | Prevents console logging while allowing file logging if enabled. |
+| Option      | Type                                    | Default     | Description                                                                                                |
+| ----------- | --------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------- |
+| `logResult` | `boolean`                               | `false`     | Log result from return value from executed function.                                                       |
+| `logToFile` | `{ path: string; logResult?: boolean }` | `undefined` | Writes logs to a specified file. **(Note: Only supported in backend environments using the `fs` module.)** |
+| `log`       | `boolean`                               | `true`      | Prevents console logging while allowing file logging if enabled.                                           |
 
 ## Contributing
 
