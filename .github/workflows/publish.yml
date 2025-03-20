@@ -10,19 +10,8 @@ on:
       - main
 
 jobs:
-  build:
+  build-publish:
     if: ${{github.event.workflow_run.event == 'push' && github.event.workflow_run.conclusion == 'success'}}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-      - run: npm ci
-      - run: npm run build
-
-  publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
