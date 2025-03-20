@@ -15,8 +15,8 @@ export type X8TResult<ResultType> = {
   executionTime: X8TExecutionTime;
 };
 
-export type X8TError = {
-  result: null;
+export type X8TError<ResultType> = {
+  result: ResultType;
   error: unknown;
   executionTime: X8TExecutionTime;
 };
@@ -24,9 +24,9 @@ export type X8TError = {
 export type X8TSync = <ResultType>(
   fn: () => ResultType,
   options?: X8TOptions
-) => X8TResult<ResultType> | X8TError;
+) => X8TResult<ResultType> | X8TError<ResultType>;
 
 export type X8TAsync = <ResultType>(
   fn: Promise<ResultType> | (() => Promise<ResultType>),
   options?: X8TOptions
-) => Promise<X8TResult<ResultType> | X8TError>;
+) => Promise<X8TResult<ResultType> | X8TError<ResultType>>;
