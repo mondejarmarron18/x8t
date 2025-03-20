@@ -1,5 +1,5 @@
 export type X8TOptions = Partial<{
-  silent: boolean;
+  log: boolean;
   logResult: boolean;
   logToFile: {
     path: string;
