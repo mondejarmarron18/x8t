@@ -18,7 +18,7 @@ jest.mock("axios");
 describe("x8tAsync and x8tSync functions", () => {
   // Success case test for async API call
   it("x8tAsync: should return the result when the API call succeeds", async () => {
-    const { result, error } = await x8tAsync(mockApiSuccess);
+    const { result, error } = await x8tAsync(mockApiSuccess, false);
 
     expect({ result, error }).toEqual({
       result: { data: "API Data Success" },
@@ -28,7 +28,7 @@ describe("x8tAsync and x8tSync functions", () => {
 
   // Error case test for async API call
   it("x8tAsync: should return the error when the API call fails", async () => {
-    const { result, error } = await x8tAsync(mockApiFailure);
+    const { result, error } = await x8tAsync(mockApiFailure, false);
 
     expect({ result, error }).toEqual({
       result: null,
@@ -40,7 +40,7 @@ describe("x8tAsync and x8tSync functions", () => {
   it("x8tAsync: should return the result when the async function succeeds", async () => {
     const successFn = async () => "Operation Successful!";
 
-    const { result, error } = await x8tAsync(successFn);
+    const { result, error } = await x8tAsync(successFn, false);
 
     expect({ result, error }).toEqual({
       result: "Operation Successful!",
@@ -54,7 +54,7 @@ describe("x8tAsync and x8tSync functions", () => {
       throw new Error("Something went wrong!");
     };
 
-    const { result, error } = await x8tAsync(errorFn);
+    const { result, error } = await x8tAsync(errorFn, false);
 
     expect({ result, error }).toEqual({
       result: null,
@@ -66,7 +66,7 @@ describe("x8tAsync and x8tSync functions", () => {
   it("x8tSync: should return the result when a synchronous function succeeds", () => {
     const syncSuccessFn = () => "Synchronous Success";
 
-    const { result, error } = x8tSync(syncSuccessFn);
+    const { result, error } = x8tSync(syncSuccessFn, false);
 
     expect({ result, error }).toEqual({
       result: "Synchronous Success",
@@ -80,7 +80,7 @@ describe("x8tAsync and x8tSync functions", () => {
       throw new Error("Sync Error!");
     };
 
-    const { result, error } = x8tSync(syncErrorFn);
+    const { result, error } = x8tSync(syncErrorFn, false);
 
     expect({ result, error }).toEqual({
       result: null,
@@ -92,7 +92,7 @@ describe("x8tAsync and x8tSync functions", () => {
   it("x8tSync: should return the execution time when a synchronous function is executed", () => {
     const syncSuccessFn = () => "Synchronous Success";
 
-    const { executionTime } = x8tSync(syncSuccessFn);
+    const { executionTime } = x8tSync(syncSuccessFn, false);
 
     expect(executionTime).toMatch(/^[0-9]+ms$/);
   });
@@ -103,7 +103,7 @@ describe("x8tAsync and x8tSync functions", () => {
       setTimeout(() => resolve("Promise Data Success"), 100)
     );
 
-    const { result, error } = await x8tAsync(mockPromiseSuccess);
+    const { result, error } = await x8tAsync(mockPromiseSuccess, false);
 
     expect({ result, error }).toEqual({
       result: "Promise Data Success",
@@ -117,7 +117,7 @@ describe("x8tAsync and x8tSync functions", () => {
       setTimeout(() => reject(new Error("Promise Error!")), 100)
     );
 
-    const { result, error } = await x8tAsync(mockPromiseFailure);
+    const { result, error } = await x8tAsync(mockPromiseFailure, false);
 
     expect({ result, error }).toEqual({
       result: null,
