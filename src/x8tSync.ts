@@ -1,10 +1,11 @@
-import { X8TOptions, X8TSync } from "./types/x8t.type";
+import { X8TSync } from "./types/x8t.type";
 import logExecution from "./utils/logExecution";
 
 // Synchronous function
 const x8tSync: X8TSync = <ResultType>(
   fn: () => ResultType,
-  options?: X8TOptions
+  enableLogging: boolean,
+  includeResult: boolean = false
 ) => {
   const start = performance.now();
 
@@ -13,15 +14,8 @@ const x8tSync: X8TSync = <ResultType>(
     const fnName =
       typeof fn === "function" ? fn.name || "anonymous" : "promise";
 
-    if (options?.log) {
-      logExecution(
-        fnName,
-        end - start,
-        result,
-        isError,
-        options?.logResult,
-        options?.logToFile
-      );
+    if (enableLogging) {
+      logExecution(fnName, end - start, result, isError, includeResult);
     }
     return Math.round(end - start);
   };

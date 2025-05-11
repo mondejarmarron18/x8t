@@ -1,10 +1,11 @@
-import { X8TAsync, X8TOptions } from "./types/x8t.type";
+import { X8TAsync } from "./types/x8t.type";
 import logExecution from "./utils/logExecution";
 
 // Asynchronous function
 const x8tAsync: X8TAsync = async <ResultType>(
   fn: Promise<ResultType> | (() => Promise<ResultType>),
-  options?: X8TOptions
+  enableLogging: boolean,
+  includeResult: boolean = false
 ) => {
   const start = performance.now();
 
@@ -13,15 +14,8 @@ const x8tAsync: X8TAsync = async <ResultType>(
     const fnName =
       typeof fn === "function" ? fn.name || "anonymous" : "promise";
 
-    if (options?.log) {
-      logExecution(
-        fnName,
-        end - start,
-        result,
-        isError,
-        options?.logResult,
-        options?.logToFile
-      );
+    if (enableLogging) {
+      logExecution(fnName, end - start, result, isError, includeResult);
     }
     return Math.round(end - start);
   };
