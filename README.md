@@ -4,13 +4,11 @@ A utility for safely executing functions.
 
 ```bash
   # Sync function
-  const { result, error, executionTime } = x8tSync(apiRequest, true, true);
+  const { result, error, executionTime } = x8tSync(func, true, true);
 
   # Async function
-  const { result, error, executionTime } = await x8tAsync(apiRequest, true, true);
+  const { result, error, executionTime } = await x8tAsync(asyncFunc, true, true);
 ```
-
-> `logToFile` deprecated, use `v4` instead
 
 ## What Problem Does It Solve?
 
