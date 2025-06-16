@@ -4,7 +4,7 @@ import logExecution from "./utils/logExecution";
 // Asynchronous function
 const x8tAsync: X8TAsync = async <ResultType>(
   fn: Promise<ResultType> | (() => Promise<ResultType>),
-  enableLogging: boolean,
+  enableLogging: boolean = false,
   includeResult: boolean = false
 ) => {
   const start = performance.now();

@@ -4,7 +4,7 @@ import logExecution from "./utils/logExecution";
 // Synchronous function
 const x8tSync: X8TSync = <ResultType>(
   fn: () => ResultType,
-  enableLogging: boolean,
+  enableLogging: boolean = false,
   includeResult: boolean = false
 ) => {
   const start = performance.now();

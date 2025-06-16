@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.0] - 2025-06-16
+
+### Changed
+
+- Updated parameters: enableLogging and includeResult to be both optional
+
 ## [5.0.0] - 2025-05-11
 
 ### Changed
