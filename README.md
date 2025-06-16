@@ -4,10 +4,10 @@ A utility for safely executing functions.
 
 ```bash
   # Sync function
-  const { result, error, executionTime } = x8tSync(func, true, true);
+  const { result, error, executionTime } = x8tSync(func);
 
   # Async function
-  const { result, error, executionTime } = await x8tAsync(asyncFunc, true, true);
+  const { result, error, executionTime } = await x8tAsync(asyncFunc);
 ```
 
 ## What Problem Does It Solve?
@@ -29,9 +29,10 @@ try {
 Declaring variables outside the `try-catch` block is necessary to use them later. With `x8t`, you eliminate this extra boilerplate and handle function execution cleanly:
 
 ```typescript
-const { result, error } = await x8tAsync(apiRequest, false);
+const { result, error } = await x8tAsync(apiRequest, true, true);
 // Now you can easily access the error or result outside the try-catch block
 // Second parameter `false` disables or `true` enables logging
+// Third parameter `false` disables or `true` enables result logging
 ```
 
 ### 2. **Avoiding Nested \*\***`try-catch`\***\* Blocks**
@@ -152,11 +153,11 @@ const asyncWithError = async () => {
 
 ## Options
 
-| Option          | Type       | Required | Default     | Description                                                           |
-| --------------- | ---------- | -------- | ----------- | --------------------------------------------------------------------- |
-| `yourFunction`  | `Function` | ✅       | –           | The function to execute. Required in both `x8tSync` and `x8tAsync`.   |
-| `enableLogging` | `boolean`  | ✅       | –           | Whether to log success or failure details to the console or terminal. |
-| `includeResult` | `boolean`  | ❌       | `undefined` | If true, also logs the return value of the function.                  |
+| Option          | Type       | Required | Default | Description                                                           |
+| --------------- | ---------- | -------- | ------- | --------------------------------------------------------------------- |
+| `yourFunction`  | `Function` | ✅       | –       | The function to execute. Required in both `x8tSync` and `x8tAsync`.   |
+| `enableLogging` | `boolean`  | ❌       | `false` | Whether to log success or failure details to the console or terminal. |
+| `includeResult` | `boolean`  | ❌       | `false` | If true, also logs the return value of the function.                  |
 
 ## Behavior Summary
 

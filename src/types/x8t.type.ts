@@ -14,12 +14,12 @@ export type X8TError<ResultType> = {
 
 export type X8TSync = <ResultType>(
   fn: () => ResultType,
-  enableLogging: boolean,
+  enableLogging?: boolean,
   includeResult?: boolean
 ) => X8TResult<ResultType> | X8TError<ResultType>;
 
 export type X8TAsync = <ResultType>(
   fn: Promise<ResultType> | (() => Promise<ResultType>),
-  enableLogging: boolean,
+  enableLogging?: boolean,
   includeResult?: boolean
 ) => Promise<X8TResult<ResultType> | X8TError<ResultType>>;
